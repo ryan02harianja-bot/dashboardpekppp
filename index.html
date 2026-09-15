@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Monitoring Pengisian Formulir 2026</title>
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --border: #e2e4e9;
+    --text-primary: #1a1c23;
+    --text-secondary: #5b616e;
+    --text-muted: #8a8f9c;
+    --red: #e34948;
+    --amber: #eda100;
+    --green: #1a9e4f;
+    --blue: #2a78d6;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    padding: 24px;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  header { margin-bottom: 24px; }
+  header h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+  header p { font-size: 14px; color: var(--text-secondary); margin: 0; }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .kpi-card .label { font-size: 13px; color: var(--text-secondary); margin: 0 0 6px; }
+  .kpi-card .value { font-size: 26px; font-weight: 600; margin: 0; }
+  .kpi-card .value.red { color: var(--red); }
+  .kpi-card .value.amber { color: var(--amber); }
+  .kpi-card .value.green { color: var(--green); }
+
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+  .chart-card p.title { font-size: 13px; color: var(--text-secondary); margin: 0 0 12px; }
+  .chart-holder { position: relative; height: 240px; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 14px; justify-content: center;
+    margin-top: 10px; font-size: 12px; color: var(--text-secondary);
+  }
+  .legend span.dot {
+    display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px;
+  }
+
+  .controls {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .controls input, .controls select {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--card);
+    color: var(--text-primary);
+  }
+  .controls input { flex: 1; min-width: 200px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    font-size: 13px;
+    table-layout: fixed;
+  }
+  thead th {
+    text-align: left;
+    background: #fafbfc;
+    padding: 10px 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  thead th.num { text-align: right; }
+  tbody td {
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  tbody td.num { text-align: right; }
+  tbody tr:hover { background: #fafbfc; }
+  .status-pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .status-Belum { background: #fdeceb; color: #b23433; }
+  .status-Sedang { background: #fdf3e0; color: #a06b00; }
+  .status-Selesai { background: #e6f4ea; color: #146c34; }
+
+  #rowCount { font-size: 12px; color: var(--text-muted); margin: 10px 2px 0; }
+
+  footer { margin-top: 24px; font-size: 12px; color: var(--text-muted); text-align: center; }
+
+  @media (max-width: 720px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .chart-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Dashboard monitoring pengisian formulir 2026</h1>
+    <p>Pemerintah Kabupaten Indragiri Hulu &middot; data per 01 Jul 2026 &middot; 140 lokus</p>
+  </header>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <p class="label">Total lokus</p>
+      <p class="value">140</p>
+    </div>
+    <div class="kpi-card">
+      <p class="label">Rata-rata progres</p>
+      <p class="value">10,7%</p>
+    </div>
+    <div class="kpi-card">
+      <p class="label">Selesai</p>
+      <p class="value green">7</p>
+    </div>
+    <div class="kpi-card">
+      <p class="label">Belum diisi</p>
+      <p class="value red">115</p>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <p class="title">Status pengisian (140 lokus)</p>
+      <div class="chart-holder">
+        <canvas id="statusChart" role="img" aria-label="Donat status pengisian: Belum diisi 115, Sedang diisi 18, Selesai 7">Belum diisi 115, Sedang diisi 18, Selesai 7</canvas>
+      </div>
+      <div class="legend">
+        <span><span class="dot" style="background:#e34948"></span>Belum diisi 115 (82%)</span>
+        <span><span class="dot" style="background:#eda100"></span>Sedang diisi 18 (13%)</span>
+        <span><span class="dot" style="background:#1a9e4f"></span>Selesai 7 (5%)</span>
+      </div>
+    </div>
+    <div class="chart-card">
+      <p class="title">Rata-rata progres per formulir</p>
+      <div class="chart-holder">
+        <canvas id="formChart" role="img" aria-label="Bar chart rata-rata progres per formulir: F01 12.8%, F02 6.8%, F03 12.5%">F01 12.8%, F02 6.8%, F03 12.5%</canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="searchBox" placeholder="Cari nama lokus...">
+    <select id="statusFilter">
+      <option value="all">Semua status</option>
+      <option value="Belum Diisi">Belum diisi</option>
+      <option value="Sedang Diisi">Sedang diisi</option>
+      <option value="Selesai">Selesai</option>
+    </select>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:44%">Lokus</th>
+        <th class="num" style="width:12%">F01</th>
+        <th class="num" style="width:12%">F02</th>
+        <th class="num" style="width:12%">F03</th>
+        <th style="width:20%">Status</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <p id="rowCount"></p>
+
+  <footer>Dibuat otomatis dari file monitoring-pengisian-2026.xlsx</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const DATA = [{"lokus": "Bagian Tata Pemerintahan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Kesejahteraan Rakyat", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Hukum", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Perekonomian dan Sumber Daya Alam", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Administrasi Pembangunan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Pengadaan Barang dan Jasa", "f01": 78.9, "f02": 0.0, "f03": 80.0, "avg": 53.0, "status": "Sedang Diisi"}, {"lokus": "Bagian Umum", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Organisasi", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Protokol dan Komunikasi Pimpinan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Perencanaan dan Keuangan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SEKRETRIAT DPRD", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "INSPEKTORAT DAERAH", "f01": 42.2, "f02": 0.0, "f03": 0.0, "avg": 14.1, "status": "Sedang Diisi"}, {"lokus": "DINAS PENDIDIKAN DAN KEBUDAYAAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS KESEHATAN", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "UPTD Puskesmas Kuala Cenaku", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Sipayung", "f01": 91.1, "f02": 0.0, "f03": 100.0, "avg": 63.7, "status": "Sedang Diisi"}, {"lokus": "UPTD Puskesmas Kambesko", "f01": 95.6, "f02": 67.7, "f03": 100.0, "avg": 87.8, "status": "Sedang Diisi"}, {"lokus": "UPTD Puskesmas Pekan Heran", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "UPTD Puskesmas Lirik", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Air Molek", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Sei Lala", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Sungai Parit", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Polak Pisang", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Rakit Kulim", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Peranap", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Batang Peranap", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Pangkalan Kasai", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "UPTD Puskesmas Batang Gansal", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Kulim Jaya", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Kilan", "f01": 2.2, "f02": 0.0, "f03": 53.3, "avg": 18.5, "status": "Sedang Diisi"}, {"lokus": "UPTD Puskesmas Lubuk Kandis", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Sencano Jaya", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Kota Medan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Kota Baru", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Pasir Penyu dan Lirik", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Kelayang dan Rakit Kulim", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Sungai Lala dan Lubuk Batu Jaya", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Seberida, Batang Gansal, dan Batang Cenaku", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Peranap dan Batang Peranap", "f01": 95.6, "f02": 0.0, "f03": 0.0, "avg": 31.9, "status": "Sedang Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Rengat Barat", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN PENGELOLAAN KEUANGAN DAN ASET DAERAH", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN KESATUAN BANGSA DAN POLITIK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN PENANGGULANGAN BENCANA DAERAH, PEMADAM KEBAKARAN DAN PENYELAMATAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN KEPEGAWAIAN, PENDIDIKAN DAN PELATIHAN DAERAH", "f01": 86.7, "f02": 80.6, "f03": 0.0, "avg": 55.8, "status": "Sedang Diisi"}, {"lokus": "KECAMATAN BATANG CENAKU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN BATANG GANSAL", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN BATANG PERANAP", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN KELAYANG", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Simpang Kelayang", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN KUALA CENAKU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN LIRIK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN LUBUK BATU JAYA", "f01": 100.0, "f02": 0.0, "f03": 80.0, "avg": 60.0, "status": "Sedang Diisi"}, {"lokus": "KECAMATAN PASIR PENYU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Tanjung Gading", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Sekar Mawar", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Tanah Merah", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Kembang Harum", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Air Molek I", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN PERANAP", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Peranap", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Batu Rijal Hilir", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN RAKIT KULIM", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN RENGAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Kampung Dagang", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Kampung Besar Kota", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Pasar Kota", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Kampung Besar Seberang", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Sekip Hulu", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Sekip Hilir", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN RENGAT BARAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Pematang Reba", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN SEBERIDA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Pangkalan Kasai", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN SUNGAI LALA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI MELATI", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI MUSLIMAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI NURUL FALAH", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI PEMBINA PERTIWI", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI PEMBINA BATU GAJAH", "f01": 44.4, "f02": 0.0, "f03": 0.0, "avg": 14.8, "status": "Sedang Diisi"}, {"lokus": "TK NEGERI PEMBINA PETONGGAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI PEMBINA PEMATANG REBA", "f01": 63.3, "f02": 0.0, "f03": 100.0, "avg": 54.4, "status": "Sedang Diisi"}, {"lokus": "TK NEGERI PEMBINA PANGKALAN KASAI", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI PEMBINA PERKEBUNAN SUNGAI LALA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 012 SEI. BERINGIN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 004 KAMPUNG DAGANG", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 019 KAMPUNG DAGANG", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 001 KAMPUNG BESAR KOTA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 009 KAMPUNG PULAU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 007 SEKIP HULU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 012 KAMPUNG DOGE", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 008 SIALANG DUA DAHAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 005 PEKAN HERAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 007 KOTA LAMA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 002 KOTA LAMA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 026 PEMATANG REBA", "f01": 23.3, "f02": 0.0, "f03": 6.7, "avg": 10.0, "status": "Sedang Diisi"}, {"lokus": "SD NEGERI 017 TITIAN RESAK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 020 SIMPANG IV BELILAS", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 011 TITIAN RESAK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 1 RENGAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 1 RENGAT BARAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 1 SEBERIDA", "f01": 5.6, "f02": 0.0, "f03": 100.0, "avg": 35.2, "status": "Sedang Diisi"}, {"lokus": "SMP NEGERI 2 RENGAT", "f01": 0.0, "f02": 0.0, "f03": 86.7, "avg": 28.9, "status": "Sedang Diisi"}, {"lokus": "SMP NEGERI 2 RENGAT BARAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 2 SEBERIDA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 3 RENGAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 3 SEBERIDA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 4 RENGAT", "f01": 95.6, "f02": 0.0, "f03": 100.0, "avg": 65.2, "status": "Sedang Diisi"}, {"lokus": "SMP NEGERI 5 RENGAT BARAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Instanlasi Farmasi Kesehatan", "f01": 66.7, "f02": 0.0, "f03": 0.0, "avg": 22.2, "status": "Sedang Diisi"}, {"lokus": "UPTD Rumas Sakit Umum Daerah Indrasari Rengat", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PEKERJAAN UMUM, PENATAAN RUANG, PERUMAHAN DAN KAWASAN PERMUKIMAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Air Limbah Domestik", "f01": 0.0, "f02": 0.0, "f03": 40.0, "avg": 13.3, "status": "Sedang Diisi"}, {"lokus": "DINAS PENGENDALIAN PENDUDUK, KELUARGA BERENCANA, PEMBERDAYAAN PEREMPUAN DAN PERLINDUNGAN ANAK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Perlindungan Perempuan dan Anak Dinas Pemberdayaan Perempuan dan Perlindungan Anak", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS LINGKUNGAN HIDUP, KEBERSIHAN DAN PERTAMANAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "DINAS PERINDUSTRIAN, PERDAGANGAN, KOPERASI, USAHA KECIL DAN MENENGAH", "f01": 97.8, "f02": 100.0, "f03": 100.0, "avg": 99.3, "status": "Sedang Diisi"}, {"lokus": "UPTD Pengelolaan Pasar", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Metrologi Legal", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PENANAMAN MODAL DAN PELAYANAN TERPADU SATU PINTU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PERKEBUNAN, PETERNAKAN DAN PERIKANAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Sentra Pembibitan Ternak Hijauan Pakan Ternak", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pasar Ternak dan Rumah Potong Hewan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Balai Benih Ikan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pembibitan Tanaman Perkebunan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pembenihan Tanaman Pangan dan Holtikultura", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS KETAHANAN PANGAN, TANAMAN PANGAN DAN HORTIKULTURA", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "DINAS SOSIAL", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "DINAS TENAGA KERJA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Balai Latihan Kerja Wilayah I Pasir Penyu Dinas Tenaga Kerja", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PEMBERDAYAAN MASYARAKAT DAN DESA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PERHUBUNGAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengujian Kendaraan Bermotor", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS KOMUNIKASI, INFORMATIKA DAN STATISTIK", "f01": 100.0, "f02": 0.0, "f03": 100.0, "avg": 66.7, "status": "Sedang Diisi"}, {"lokus": "DINAS KEPEMUDAAN, OLAHRAGA DAN PARIWISATA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PERPUSTAKAAN DAN KEARSIPAN", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "SATUAN POLISI PAMONG PRAJA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN PERENCANAAN PEMBANGUNAN, RISET DAN INOVASI", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN PENDAPATAN DAERAH", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Rengat dan Kuala Cenaku", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}];
+
+new Chart(document.getElementById('statusChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Belum diisi', 'Sedang diisi', 'Selesai'],
+    datasets: [{ data: [115, 18, 7], backgroundColor: ['#e34948', '#eda100', '#1a9e4f'], borderWidth: 2, borderColor: '#ffffff' }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('formChart'), {
+  type: 'bar',
+  data: {
+    labels: ['F01', 'F02', 'F03'],
+    datasets: [{ label: 'Rata-rata (%)', data: [12.8, 6.8, 12.5], backgroundColor: '#2a78d6', borderRadius: 4, maxBarThickness: 40 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+function statusClass(s) {
+  if (s === 'Selesai') return 'status-Selesai';
+  if (s === 'Sedang Diisi') return 'status-Sedang';
+  return 'status-Belum';
+}
+
+function renderTable() {
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  const f = document.getElementById('statusFilter').value;
+  const rows = DATA.filter(d => d.lokus.toLowerCase().includes(q) && (f === 'all' || d.status === f));
+  const body = document.getElementById('tableBody');
+  body.innerHTML = rows.map(d => `
+    <tr>
+      <td title="${d.lokus}">${d.lokus}</td>
+      <td class="num">${d.f01}%</td>
+      <td class="num">${d.f02}%</td>
+      <td class="num">${d.f03}%</td>
+      <td><span class="status-pill ${statusClass(d.status)}">${d.status}</span></td>
+    </tr>
+  `).join('');
+  document.getElementById('rowCount').textContent = `Menampilkan ${rows.length} dari ${DATA.length} lokus`;
+}
+
+document.getElementById('searchBox').addEventListener('input', renderTable);
+document.getElementById('statusFilter').addEventListener('change', renderTable);
+renderTable();
+</script>
+</body>
+</html>
