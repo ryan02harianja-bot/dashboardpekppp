@@ -1,264 +1,699 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Monitoring PEKPPP 2026</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hasil Survei Kepuasan Masyarakat — Kabupaten Indragiri Hulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f4f5f7;
-    --card: #ffffff;
-    --border: #e2e4e9;
-    --text-primary: #1a1c23;
-    --text-secondary: #5b616e;
-    --text-muted: #8a8f9c;
-    --red: #e34948;
-    --amber: #eda100;
-    --green: #1a9e4f;
-    --blue: #2a78d6;
-    --radius: 10px;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    padding: 24px;
-  }
-  .wrap { max-width: 1100px; margin: 0 auto; }
-  header { margin-bottom: 24px; }
-  header h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
-  header p { font-size: 14px; color: var(--text-secondary); margin: 0; }
+:root{
+  --paper:#F6F8F7;
+  --panel:#FFFFFF;
+  --panel-2:#F0F4F2;
+  --ink:#0C2026;
+  --ink-2:#405B65;
+  --ink-3:#77909A;
+  --line:#DCE5E1;
+  --line-soft:#EAF0EC;
+  --night:#08222A;
+  --night-2:#0E3A42;
+  --teal:#0E7C7B;
+  --gold:#C98A1C;
+  --gold-bright:#E6B347;
+  --a:#17875C; --b:#2A6AB5; --c:#C4801A; --d:#AE3737;
+  --a-soft:#E1F1E9; --b-soft:#E2EAF6; --c-soft:#F8EEDA; --d-soft:#F6E3E3;
+  --r:14px;
+  --maxw:1200px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#071A20; --panel:#0E272F; --panel-2:#123039; --ink:#E9F2EE; --ink-2:#A9C0C5; --ink-3:#7A949B;
+  --line:#1E3D46; --line-soft:#173039; --night:#040F14; --night-2:#0B2C34;
+  --teal:#4FBFAE; --gold:#E0AB43; --gold-bright:#F2C766;
+  --a:#48C287; --b:#6BA6E8; --c:#E0A44A; --d:#E27E7E;
+  --a-soft:#14332A; --b-soft:#132A3E; --c-soft:#322810; --d-soft:#331C1C;
+}}
+:root[data-theme="dark"]{
+  --paper:#071A20; --panel:#0E272F; --panel-2:#123039; --ink:#E9F2EE; --ink-2:#A9C0C5; --ink-3:#7A949B;
+  --line:#1E3D46; --line-soft:#173039; --night:#040F14; --night-2:#0B2C34;
+  --teal:#4FBFAE; --gold:#E0AB43; --gold-bright:#F2C766;
+  --a:#48C287; --b:#6BA6E8; --c:#E0A44A; --d:#E27E7E;
+  --a-soft:#14332A; --b-soft:#132A3E; --c-soft:#322810; --d-soft:#331C1C;
+}
 
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-  .kpi-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 18px;
-  }
-  .kpi-card .label { font-size: 13px; color: var(--text-secondary); margin: 0 0 6px; }
-  .kpi-card .value { font-size: 26px; font-weight: 600; margin: 0; }
-  .kpi-card .value.red { color: var(--red); }
-  .kpi-card .value.amber { color: var(--amber); }
-  .kpi-card .value.green { color: var(--green); }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:78px}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+h1,h2,h3,.dsp{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;font-weight:800;letter-spacing:-.025em;line-height:1.08;margin:0}
+p{margin:0}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
 
-  .chart-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .chart-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px;
-  }
-  .chart-card p.title { font-size: 13px; color: var(--text-secondary); margin: 0 0 12px; }
-  .chart-holder { position: relative; height: 240px; }
-  .legend {
-    display: flex; flex-wrap: wrap; gap: 14px; justify-content: center;
-    margin-top: 10px; font-size: 12px; color: var(--text-secondary);
-  }
-  .legend span.dot {
-    display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: -1px;
-  }
+/* nav */
+.nav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:15px;letter-spacing:-.02em;white-space:nowrap}
+.brand-mark{width:26px;height:26px;border-radius:8px;background:linear-gradient(140deg,var(--teal),var(--night-2));display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;flex:none}
+.nav-links{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
+.nav-links a{font-size:13px;color:var(--ink-2);text-decoration:none;padding:6px 11px;border-radius:99px;transition:.15s}
+.nav-links a:hover{background:var(--panel);color:var(--teal);box-shadow:0 0 0 1px var(--line)}
+.tbtn{border:1px solid var(--line);background:var(--panel);color:var(--ink-2);border-radius:99px;padding:6px 13px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+.tbtn:hover{border-color:var(--teal);color:var(--teal)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 
-  .controls {
-    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
-  }
-  .controls input, .controls select {
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 14px;
-    background: var(--card);
-    color: var(--text-primary);
-  }
-  .controls input { flex: 1; min-width: 200px; }
+/* hero */
+.hero{background:
+   radial-gradient(1100px 460px at 78% -8%, rgba(230,179,71,.16), transparent 62%),
+   radial-gradient(760px 420px at 6% 104%, rgba(79,191,174,.18), transparent 60%),
+   linear-gradient(158deg, var(--night) 0%, var(--night-2) 100%);
+  color:#EAF4F1;position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.055) 1px, transparent 1px);background-size:22px 22px;mask-image:linear-gradient(to bottom,#000,transparent 85%)}
+.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.08fr .92fr;gap:48px;align-items:center;padding:64px 40px 54px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.01em;color:#9FD5CB;border:1px solid rgba(159,213,203,.32);padding:5px 13px;border-radius:99px;margin-bottom:22px}
+.kicker b{width:6px;height:6px;border-radius:99px;background:var(--gold-bright);display:block}
+.hero h1{font-size:clamp(32px,5.4vw,56px);max-width:15ch;color:#fff}
+.hero h1 em{font-style:normal;color:var(--gold-bright)}
+.hero p.lead{margin-top:18px;max-width:52ch;color:#B8D3CF;font-size:16.5px;line-height:1.6}
+.hero-stats{display:flex;gap:30px;margin-top:30px;flex-wrap:wrap}
+.hs .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:27px;color:#fff;letter-spacing:-.03em;line-height:1.1}
+.hs .k{font-size:12.5px;color:#8FB3B0;margin-top:2px}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    font-size: 13px;
-    table-layout: fixed;
-  }
-  thead th {
-    text-align: left;
-    background: #fafbfc;
-    padding: 10px 12px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    border-bottom: 1px solid var(--border);
-  }
-  thead th.num { text-align: right; }
-  tbody td {
-    padding: 8px 12px;
-    border-top: 1px solid var(--border);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  tbody td.num { text-align: right; }
-  tbody tr:hover { background: #fafbfc; }
-  .status-pill {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 500;
-  }
-  .status-Belum { background: #fdeceb; color: #b23433; }
-  .status-Sedang { background: #fdf3e0; color: #a06b00; }
-  .status-Selesai { background: #e6f4ea; color: #146c34; }
+/* gauge */
+.gauge-box{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:26px 24px 22px;text-align:center;backdrop-filter:blur(4px)}
+.gauge-box svg{width:100%;height:auto;max-width:330px}
+.g-val{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:52px;letter-spacing:-.04em;color:var(--gold-bright);line-height:1;margin-top:-46px}
+.g-lab{font-size:13px;color:#A8C9C4;margin-top:8px}
+.g-badge{display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:#0C2026;background:var(--gold-bright);padding:5px 15px;border-radius:99px}
+.g-foot{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:12.5px;color:#8FB3B0}
 
-  #rowCount { font-size: 12px; color: var(--text-muted); margin: 10px 2px 0; }
+/* sections */
+section{padding:62px 0 4px}
+.sec-head{margin-bottom:26px;max-width:66ch}
+.sec-no{display:inline-block;font-size:12px;font-weight:600;color:var(--teal);background:var(--panel);border:1px solid var(--line);padding:3px 11px;border-radius:99px;margin-bottom:12px}
+.sec-head h2{font-size:clamp(23px,3.4vw,32px)}
+.sec-head p{margin-top:10px;color:var(--ink-2);font-size:15.5px}
+.g2{display:grid;grid-template-columns:1.22fr .78fr;gap:22px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.card h3{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:16px;letter-spacing:0}
+.note{font-size:13px;color:var(--ink-3);margin-top:8px;line-height:1.55}
 
-  footer { margin-top: 24px; font-size: 12px; color: var(--text-muted); text-align: center; }
+/* podium */
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.pod{border-radius:var(--r);padding:22px;border:1px solid var(--line);background:var(--panel);position:relative;overflow:hidden}
+.pod::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--a)}
+.pod.rk1{background:linear-gradient(150deg,var(--panel),var(--a-soft))}
+.pod-rank{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:13px;color:var(--a);letter-spacing:0}
+.pod-name{font-size:15px;font-weight:600;margin-top:10px;line-height:1.35}
+.pod-val{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:34px;letter-spacing:-.035em;margin-top:12px;color:var(--a)}
+.pod-meta{font-size:12.5px;color:var(--ink-3);margin-top:4px}
+.pod.low::before{background:var(--c)} .pod.low .pod-rank,.pod.low .pod-val{color:var(--c)}
+.pod.low.rk1{background:linear-gradient(150deg,var(--panel),var(--c-soft))}
 
-  @media (max-width: 720px) {
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    .chart-grid { grid-template-columns: 1fr; }
-  }
+/* bars */
+.bars{margin-top:18px;display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:118px 1fr 54px;gap:13px;align-items:center;font-size:13.5px}
+.bar-track{height:12px;background:var(--line-soft);border-radius:99px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),color-mix(in srgb,var(--teal) 55%, var(--b)))}
+.bar-row.low .bar-fill{background:linear-gradient(90deg,var(--c),var(--gold-bright))}
+.bar-lab{color:var(--ink-2)}
+.bar-val{text-align:right;font-weight:600}
+.avgline{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.4}
+
+/* heatmap */
+.hm{overflow-x:auto;margin-top:6px}
+.hm-grid{min-width:720px;display:grid;grid-template-columns:200px repeat(9,1fr);gap:3px;align-items:center}
+.hm-h{font-size:11px;color:var(--ink-3);text-align:center;padding-bottom:6px;line-height:1.25}
+.hm-n{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:10px;cursor:pointer}
+.hm-n:hover{color:var(--teal)}
+.hm-c{height:30px;border-radius:5px;display:grid;place-items:center;font-size:11px;font-weight:600;color:#fff;cursor:pointer;transition:transform .12s}
+.hm-c:hover{transform:scale(1.14);z-index:3;position:relative;box-shadow:0 3px 12px rgba(0,0,0,.22)}
+.hm-legend{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:12px;color:var(--ink-3);flex-wrap:wrap}
+.hm-scale{height:10px;width:190px;border-radius:99px;background:linear-gradient(90deg,#AE3737,#D9A030,#12866A)}
+
+/* ranking */
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+input[type=search],select{font:inherit;font-size:14px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);min-width:0}
+input[type=search]{flex:1 1 230px}
+.rank{display:flex;flex-direction:column;gap:5px}
+.rank-row{display:grid;grid-template-columns:30px minmax(0,1fr) 1.1fr 56px 26px;gap:12px;align-items:center;padding:7px 9px;border-radius:9px;cursor:pointer;border:1px solid transparent;background:none;font:inherit;color:inherit;width:100%;text-align:left;transition:.13s}
+.rank-row:hover{background:var(--panel-2);border-color:var(--line)}
+.rank-no{font-size:12px;color:var(--ink-3);text-align:center}
+.rank-name{font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-track{height:18px;background:var(--line-soft);border-radius:5px;overflow:hidden}
+.rank-fill{height:100%;border-radius:5px}
+.rank-val{text-align:right;font-weight:600;font-size:13.5px}
+.rank-chip{font-size:10.5px;font-weight:700;text-align:center;border-radius:5px;padding:2px 0}
+.f-a{background:linear-gradient(90deg,color-mix(in srgb,var(--a) 62%,transparent),var(--a))}
+.f-b{background:linear-gradient(90deg,color-mix(in srgb,var(--b) 62%,transparent),var(--b))}
+.f-c{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 62%,transparent),var(--c))}
+.f-d{background:linear-gradient(90deg,color-mix(in srgb,var(--d) 62%,transparent),var(--d))}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);margin-top:10px}
+
+/* donut + mini */
+.donut-wrap{display:flex;align-items:center;gap:18px;margin-top:14px;flex-wrap:wrap}
+.legend{display:flex;flex-direction:column;gap:9px;font-size:13px;flex:1 1 140px}
+.legend div{display:flex;align-items:center;gap:9px}
+.dot{width:11px;height:11px;border-radius:4px;flex:none}
+.mini{margin-top:16px;display:flex;flex-direction:column;gap:14px}
+.mini-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:13px;color:var(--ink-2)}
+.mini-top b{color:var(--ink);font-weight:600;white-space:nowrap}
+.mini-track{height:10px;background:var(--line-soft);border-radius:99px;overflow:hidden}
+.mini-fill{height:100%;border-radius:99px;background:var(--teal)}
+
+/* priority */
+.prio{display:flex;flex-direction:column;gap:11px;margin-top:18px}
+.prio-row{display:grid;grid-template-columns:112px 1fr 84px;gap:12px;align-items:center;font-size:13.5px}
+.prio-track{height:26px;background:var(--line-soft);border-radius:7px;overflow:hidden}
+.prio-fill{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--gold),var(--gold-bright))}
+.prio-n{font-size:12.5px;color:var(--ink-3);text-align:right}
+
+/* table */
+.tw{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:900px;font-size:13.5px}
+th,td{padding:11px 13px;text-align:right;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+th{position:sticky;top:0;background:var(--panel);font-weight:600;font-size:12.5px;color:var(--ink-2);cursor:pointer;z-index:2;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:215px;position:sticky;left:0;background:var(--panel);z-index:1}
+th:first-child{z-index:3}
+th.sorted{color:var(--teal)}
+th.sorted::after{content:" ▾"} th.sorted.asc::after{content:" ▴"}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:var(--panel-2)}
+tfoot td{background:var(--panel-2);font-weight:600;border-top:2px solid var(--line)}
+.chip{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:99px;line-height:1.55}
+.chip-a{background:var(--a-soft);color:var(--a)} .chip-b{background:var(--b-soft);color:var(--b)}
+.chip-c{background:var(--c-soft);color:var(--c)} .chip-d{background:var(--d-soft);color:var(--d)}
+.tag{display:inline-block;font-size:12px;padding:3px 11px;background:var(--panel-2);border:1px solid var(--line);border-radius:99px;color:var(--ink-2);margin:0 5px 5px 0}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(4,20,25,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:60}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(540px,100%);background:var(--panel);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .26s cubic-bezier(.3,.8,.35,1);z-index:61;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer-hd{background:linear-gradient(150deg,var(--night),var(--night-2));color:#EAF4F1;padding:26px 26px 22px}
+.drawer-hd h3{font-size:21px;max-width:24ch;color:#fff}
+.drawer-body{padding:0 26px 40px}
+.dclose{position:absolute;top:16px;right:16px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;border-radius:99px;width:32px;height:32px;cursor:pointer;font-size:17px;line-height:1;z-index:2}
+.dscore{display:flex;align-items:baseline;gap:12px;margin-top:16px}
+.dscore .n{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:42px;letter-spacing:-.035em;color:var(--gold-bright)}
+.dmeta{font-size:12.5px;color:#9FC0BC;margin-top:8px}
+.dsec{margin-top:26px;border-top:1px solid var(--line-soft);padding-top:20px}
+.dsec:first-child{border-top:0}
+.dsec h4{margin:0 0 12px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.rtl{font-size:14px;color:var(--ink-2);line-height:1.66}
+.svc{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.svc-row{display:grid;grid-template-columns:1fr 48px 56px;gap:10px;align-items:center}
+.svc-row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink-2)}
+.svc-row b{text-align:right;font-weight:600}
+.svc-row i{text-align:right;font-style:normal;font-size:12px;color:var(--ink-3)}
+
+/* notes */
+.notes{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--r);padding:26px}
+.notes ul{margin:14px 0 0;padding-left:20px;color:var(--ink-2);font-size:14px}
+.notes li{margin-bottom:10px}
+footer{margin-top:66px;background:linear-gradient(150deg,var(--night),var(--night-2));color:#9FC0BC;padding:34px 0;font-size:13px;line-height:1.7}
+footer strong{color:#EAF4F1;font-weight:600}
+
+@media (max-width:960px){
+  .hero-in{grid-template-columns:1fr;gap:34px;padding:44px 24px 42px}
+  .g2,.g3,.podium{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .bar-row{grid-template-columns:96px 1fr 48px}
+  .prio-row{grid-template-columns:92px 1fr 70px}
+  .rank-row{grid-template-columns:24px minmax(0,1.1fr) .85fr 48px 24px;gap:9px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.nav,.scrim,.drawer,.tools,.tbtn{display:none!important}.tw{max-height:none}body{background:#fff}section{page-break-inside:avoid}}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
-    <h1>Dashboard Monitoring PEKPPP 2026</h1>
-    <p>Pemerintah Kabupaten Indragiri Hulu &middot; data per 01 Jul 2026 &middot; 140 lokus</p>
-  </header>
-
-  <div class="kpi-grid">
-    <div class="kpi-card">
-      <p class="label">Total lokus</p>
-      <p class="value">140</p>
+<nav class="nav">
+  <div class="nav-in">
+    <div class="brand"><span class="brand-mark">IH</span>SKM Indragiri Hulu</div>
+    <div class="nav-links">
+      <a href="#ikhtisar">Ikhtisar</a><a href="#papan">Papan nilai</a><a href="#unsur">Sembilan unsur</a>
+      <a href="#peta">Peta panas</a><a href="#peringkat">Peringkat</a><a href="#sebaran">Sebaran</a>
+      <a href="#prioritas">Prioritas</a><a href="#tabel">Tabel</a>
     </div>
-    <div class="kpi-card">
-      <p class="label">Rata-rata progres</p>
-      <p class="value">10,7%</p>
-    </div>
-    <div class="kpi-card">
-      <p class="label">Selesai</p>
-      <p class="value green">7</p>
-    </div>
-    <div class="kpi-card">
-      <p class="label">Belum diisi</p>
-      <p class="value red">115</p>
-    </div>
+    <button class="tbtn" id="themeBtn" type="button">Mode gelap</button>
   </div>
+</nav>
 
-  <div class="chart-grid">
-    <div class="chart-card">
-      <p class="title">Status pengisian (140 lokus)</p>
-      <div class="chart-holder">
-        <canvas id="statusChart" role="img" aria-label="Donat status pengisian: Belum diisi 115, Sedang diisi 18, Selesai 7">Belum diisi 115, Sedang diisi 18, Selesai 7</canvas>
-      </div>
-      <div class="legend">
-        <span><span class="dot" style="background:#e34948"></span>Belum diisi 115 (82%)</span>
-        <span><span class="dot" style="background:#eda100"></span>Sedang diisi 18 (13%)</span>
-        <span><span class="dot" style="background:#1a9e4f"></span>Selesai 7 (5%)</span>
+<header class="hero" id="ikhtisar">
+  <div class="wrap hero-in">
+    <div>
+      <span class="kicker"><b></b> Periode survei tahunan · 22 unit pelayanan</span>
+      <h1>Bagaimana masyarakat menilai <em>pelayanan publik</em> kami</h1>
+      <p class="lead">Hasil Survei Kepuasan Masyarakat Kabupaten Indragiri Hulu, dihimpun dari 6.749 responden dan dinilai dengan sembilan unsur pelayanan sesuai PermenPANRB Nomor 14 Tahun 2017.</p>
+      <div class="hero-stats">
+        <div class="hs"><div class="v">22</div><div class="k">Unit pelayanan</div></div>
+        <div class="hs"><div class="v">6.749</div><div class="k">Responden</div></div>
+        <div class="hs"><div class="v" style="color:#7DE0B4">6</div><div class="k">Bermutu A</div></div>
+        <div class="hs"><div class="v" style="color:#93C2F0">16</div><div class="k">Bermutu B</div></div>
+        <div class="hs"><div class="v">56%</div><div class="k">Tindak lanjut lalu</div></div>
       </div>
     </div>
-    <div class="chart-card">
-      <p class="title">Rata-rata progres per formulir</p>
-      <div class="chart-holder">
-        <canvas id="formChart" role="img" aria-label="Bar chart rata-rata progres per formulir: F01 12.8%, F02 6.8%, F03 12.5%">F01 12.8%, F02 6.8%, F03 12.5%</canvas>
-      </div>
+    <div class="gauge-box">
+      <svg viewBox="0 0 300 186" id="gauge" role="img" aria-label="Indeks kepuasan masyarakat 86,07 dari 100"></svg>
+      <div class="g-val" id="gVal">0,00</div>
+      <div class="g-lab">Indeks Kepuasan Masyarakat kabupaten</div>
+      <div class="g-badge">Mutu B — kinerja Baik</div>
+      <div class="g-foot">Kurang <strong style="color:#EAF4F1">2,24 poin</strong> lagi untuk naik ke mutu A (ambang 88,31)</div>
     </div>
   </div>
+</header>
 
-  <div class="controls">
-    <input type="text" id="searchBox" placeholder="Cari nama lokus...">
-    <select id="statusFilter">
-      <option value="all">Semua status</option>
-      <option value="Belum Diisi">Belum diisi</option>
-      <option value="Sedang Diisi">Sedang diisi</option>
-      <option value="Selesai">Selesai</option>
-    </select>
+<section class="wrap" id="papan">
+  <div class="sec-head">
+    <span class="sec-no">Papan nilai</span>
+    <h2>Tiga tertinggi dan tiga terendah</h2>
+    <p>Rentang antara unit terbaik dan terendah mencapai 18,68 poin — tanda mutu pelayanan belum merata antar perangkat daerah.</p>
   </div>
+  <div class="podium" id="podTop" style="margin-bottom:20px"></div>
+  <div class="podium" id="podLow"></div>
+</section>
 
-  <table>
-    <thead>
-      <tr>
-        <th style="width:44%">Lokus</th>
-        <th class="num" style="width:12%">F01</th>
-        <th class="num" style="width:12%">F02</th>
-        <th class="num" style="width:12%">F03</th>
-        <th style="width:20%">Status</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
-  <p id="rowCount"></p>
+<section class="wrap" id="unsur">
+  <div class="sec-head">
+    <span class="sec-no">Sembilan unsur</span>
+    <h2>Unsur mana yang kuat, mana yang tertinggal</h2>
+    <p>Nilai gabungan seluruh unit. Biaya hampir sempurna karena sebagian besar layanan tidak dipungut biaya, sementara waktu penyelesaian jadi titik paling lemah.</p>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <h3>Nilai per unsur, tingkat kabupaten</h3>
+      <p class="note">Garis vertikal menandai IKM kabupaten (86,07). Batang oranye berada di bawah angka itu.</p>
+      <div class="bars" id="unsurBars"></div>
+    </div>
+    <div class="card">
+      <h3>Tiga hal yang perlu dibaca</h3>
+      <div class="mini" id="insights"></div>
+    </div>
+  </div>
+</section>
 
-  <footer>Dibuat otomatis dari file monitoring-pengisian-2026.xlsx</footer>
-</div>
+<section class="wrap" id="peta">
+  <div class="sec-head">
+    <span class="sec-no">Peta panas</span>
+    <h2>Seluruh unit, seluruh unsur, dalam satu layar</h2>
+    <p>Satu baris satu unit pelayanan, satu kolom satu unsur. Warna merah menandai nilai rendah. Klik sel mana pun untuk membuka rincian unit.</p>
+  </div>
+  <div class="card">
+    <div class="hm"><div class="hm-grid" id="heat"></div></div>
+    <div class="hm-legend"><span>50</span><span class="hm-scale"></span><span>100</span>
+      <span style="margin-left:10px">Dua sel paling merah adalah unsur waktu di Kecamatan Lirik (50,00) dan Kecamatan Batang Cenaku (51,00).</span></div>
+  </div>
+</section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<section class="wrap" id="peringkat">
+  <div class="sec-head">
+    <span class="sec-no">Peringkat</span>
+    <h2>Urutan 22 unit pelayanan</h2>
+    <p>Cari, saring, dan urutkan sesuai kebutuhan. Klik salah satu baris untuk rincian lengkapnya.</p>
+  </div>
+  <div class="card">
+    <div class="tools">
+      <input type="search" id="rankSearch" placeholder="Cari nama unit pelayanan…" aria-label="Cari unit pelayanan">
+      <select id="rankFilter" aria-label="Saring mutu"><option value="all">Semua mutu</option><option value="A">Mutu A — Sangat Baik</option><option value="B">Mutu B — Baik</option></select>
+      <select id="rankSort" aria-label="Urutkan"><option value="ikm">IKM tertinggi</option><option value="ikmasc">IKM terendah</option><option value="n">Responden terbanyak</option><option value="nama">Nama A–Z</option></select>
+    </div>
+    <div class="rank" id="rankList"></div>
+    <div class="axis"><span>70</span><span>77,5</span><span>85</span><span>92,5</span><span>100</span></div>
+    <p class="note">Sumbu dipotong mulai 70 agar selisih antarunit terlihat jelas.</p>
+  </div>
+</section>
+
+<section class="wrap" id="sebaran">
+  <div class="sec-head">
+    <span class="sec-no">Sebaran</span>
+    <h2>Mutu, metode, dan tindak lanjut</h2>
+    <p>Gambaran cara survei dijalankan dan sejauh mana rekomendasi periode lalu sudah dikerjakan.</p>
+  </div>
+  <div class="g3">
+    <div class="card"><h3>Kategori mutu</h3>
+      <div class="donut-wrap"><svg viewBox="0 0 120 120" width="124" height="124" id="donut" role="img" aria-label="Sebaran kategori mutu"></svg><div class="legend" id="donutLegend"></div></div>
+    </div>
+    <div class="card"><h3>Metode pengumpulan</h3><div class="mini" id="metodeChart"></div>
+      <p class="note">Survei manual masih dominan. Peralihan ke kanal daring membuka peluang pengumpulan yang lebih berkelanjutan.</p></div>
+    <div class="card"><h3>Tindak lanjut periode lalu</h3><div class="mini" id="tlChart"></div>
+      <p class="note">Rata-rata kabupaten 56%. Delapan unit belum menindaklanjuti rekomendasi periode lalu sama sekali.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="prioritas">
+  <div class="sec-head">
+    <span class="sec-no">Prioritas</span>
+    <h2>Apa yang paling banyak perlu dibenahi</h2>
+    <p>Berapa unit yang menetapkan tiap unsur sebagai fokus perbaikan tahun ini — bahan paling langsung untuk kebijakan lintas perangkat daerah.</p>
+  </div>
+  <div class="g2">
+    <div class="card"><h3>Unsur yang paling sering jadi fokus perbaikan</h3><div class="prio" id="prioChart"></div></div>
+    <div class="card"><h3>Tema rencana tindak lanjut</h3><div class="mini" id="rtlThemes"></div>
+      <p class="note">Dihitung dari kata kunci pada kolom rencana tindak lanjut; satu unit bisa masuk lebih dari satu tema.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="tabel">
+  <div class="sec-head">
+    <span class="sec-no">Tabel</span>
+    <h2>Data lengkap</h2>
+    <p>Klik judul kolom untuk mengurutkan, klik baris untuk membuka rincian unit.</p>
+  </div>
+  <div class="tools"><input type="search" id="tblSearch" placeholder="Cari unit pelayanan…" aria-label="Cari di tabel"></div>
+  <div class="tw">
+    <table id="tbl">
+      <thead><tr>
+        <th data-k="nama">Unit pelayanan</th><th data-k="u0">Persyaratan</th><th data-k="u1">Prosedur</th>
+        <th data-k="u2">Waktu</th><th data-k="u3">Biaya</th><th data-k="u4">Produk</th><th data-k="u5">Kompetensi</th>
+        <th data-k="u6">Perilaku</th><th data-k="u7">Pengaduan</th><th data-k="u8">Sarpras</th>
+        <th data-k="ikm" class="sorted">IKM</th><th data-k="mutu">Mutu</th><th data-k="n">Responden</th><th data-k="tl">TL lalu</th>
+      </tr></thead>
+      <tbody id="tblBody"></tbody><tfoot id="tblFoot"></tfoot>
+    </table>
+  </div>
+</section>
+
+<section class="wrap" id="catatan">
+  <div class="sec-head"><span class="sec-no">Catatan</span><h2>Hal yang perlu dikonfirmasi</h2></div>
+  <div class="notes">
+    <p style="font-size:14px;color:var(--ink-2)">Enam temuan berikut sebaiknya diklarifikasi ke unit bersangkutan sebelum dashboard dipublikasikan luas:</p>
+    <ul>
+      <li><strong>Kecamatan Sungai Lala</strong> — nilai sembilan unsurnya berkisar 72–84, tetapi IKM tercatat 85,01. Kemungkinan nilai unsur belum dikonversi.</li>
+      <li><strong>Bagian Pengadaan Barang dan Jasa</strong> — total responden 1.833, sementara penjumlahan responden per jenis layanan hanya 39.</li>
+      <li><strong>Penjumlahan responden</strong> — total per unit menghasilkan 6.859, berbeda 110 responden dari angka kabupaten 6.749. Selisihnya persis sama dengan jumlah responden Dinas Tenaga Kerja.</li>
+      <li><strong>Skala nilai per jenis layanan</strong> — BKPPD, Sungai Lala, Batang Cenaku, dan DPMPTSP mencatat nilai unsur per layanan dalam skala berbeda. Karena itu rincian layanan di sini hanya menampilkan IKM dan jumlah responden.</li>
+      <li><strong>Kecamatan Peranap</strong> — kolom persentase tindak lanjut periode lalu kosong pada dokumen sumber, sehingga tidak dihitung dalam rata-rata.</li>
+      <li><strong>Sebagian teks rencana tindak lanjut</strong> terpotong di dokumen sumber dan ditandai dengan tanda elipsis.</li>
+    </ul>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <strong>Survei Kepuasan Masyarakat Kabupaten Indragiri Hulu</strong> · Disusun dari dokumen rekapitulasi hasil SKM perangkat daerah, periode survei tahunan.<br>
+  Kategori mutu mengikuti PermenPANRB Nomor 14 Tahun 2017 — A sangat baik (88,31–100), B baik (76,61–88,30), C kurang baik (65,00–76,60), D tidak baik (25,00–64,99).
+</div></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Rincian unit pelayanan">
+  <button class="dclose" id="drawerClose" aria-label="Tutup">×</button>
+  <div id="drawerHead"></div><div class="drawer-body" id="drawerBody"></div>
+</aside>
+
 <script>
-const DATA = [{"lokus": "Bagian Tata Pemerintahan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Kesejahteraan Rakyat", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Hukum", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Perekonomian dan Sumber Daya Alam", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Administrasi Pembangunan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Pengadaan Barang dan Jasa", "f01": 78.9, "f02": 0.0, "f03": 80.0, "avg": 53.0, "status": "Sedang Diisi"}, {"lokus": "Bagian Umum", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Organisasi", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Protokol dan Komunikasi Pimpinan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Bagian Perencanaan dan Keuangan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SEKRETRIAT DPRD", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "INSPEKTORAT DAERAH", "f01": 42.2, "f02": 0.0, "f03": 0.0, "avg": 14.1, "status": "Sedang Diisi"}, {"lokus": "DINAS PENDIDIKAN DAN KEBUDAYAAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS KESEHATAN", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "UPTD Puskesmas Kuala Cenaku", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Sipayung", "f01": 91.1, "f02": 0.0, "f03": 100.0, "avg": 63.7, "status": "Sedang Diisi"}, {"lokus": "UPTD Puskesmas Kambesko", "f01": 95.6, "f02": 67.7, "f03": 100.0, "avg": 87.8, "status": "Sedang Diisi"}, {"lokus": "UPTD Puskesmas Pekan Heran", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "UPTD Puskesmas Lirik", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Air Molek", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Sei Lala", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Sungai Parit", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Polak Pisang", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Rakit Kulim", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Peranap", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Batang Peranap", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Pangkalan Kasai", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "UPTD Puskesmas Batang Gansal", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Kulim Jaya", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Kilan", "f01": 2.2, "f02": 0.0, "f03": 53.3, "avg": 18.5, "status": "Sedang Diisi"}, {"lokus": "UPTD Puskesmas Lubuk Kandis", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Sencano Jaya", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Kota Medan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Puskesmas Kota Baru", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Pasir Penyu dan Lirik", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Kelayang dan Rakit Kulim", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Sungai Lala dan Lubuk Batu Jaya", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Seberida, Batang Gansal, dan Batang Cenaku", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Peranap dan Batang Peranap", "f01": 95.6, "f02": 0.0, "f03": 0.0, "avg": 31.9, "status": "Sedang Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Rengat Barat", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN PENGELOLAAN KEUANGAN DAN ASET DAERAH", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN KESATUAN BANGSA DAN POLITIK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN PENANGGULANGAN BENCANA DAERAH, PEMADAM KEBAKARAN DAN PENYELAMATAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN KEPEGAWAIAN, PENDIDIKAN DAN PELATIHAN DAERAH", "f01": 86.7, "f02": 80.6, "f03": 0.0, "avg": 55.8, "status": "Sedang Diisi"}, {"lokus": "KECAMATAN BATANG CENAKU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN BATANG GANSAL", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN BATANG PERANAP", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN KELAYANG", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Simpang Kelayang", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN KUALA CENAKU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN LIRIK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN LUBUK BATU JAYA", "f01": 100.0, "f02": 0.0, "f03": 80.0, "avg": 60.0, "status": "Sedang Diisi"}, {"lokus": "KECAMATAN PASIR PENYU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Tanjung Gading", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Sekar Mawar", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Tanah Merah", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Kembang Harum", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Air Molek I", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN PERANAP", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Peranap", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Batu Rijal Hilir", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN RAKIT KULIM", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN RENGAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Kampung Dagang", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Kampung Besar Kota", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Pasar Kota", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Kampung Besar Seberang", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Sekip Hulu", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Sekip Hilir", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN RENGAT BARAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Pematang Reba", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN SEBERIDA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Kelurahan Pangkalan Kasai", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "KECAMATAN SUNGAI LALA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI MELATI", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI MUSLIMAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI NURUL FALAH", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI PEMBINA PERTIWI", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI PEMBINA BATU GAJAH", "f01": 44.4, "f02": 0.0, "f03": 0.0, "avg": 14.8, "status": "Sedang Diisi"}, {"lokus": "TK NEGERI PEMBINA PETONGGAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI PEMBINA PEMATANG REBA", "f01": 63.3, "f02": 0.0, "f03": 100.0, "avg": 54.4, "status": "Sedang Diisi"}, {"lokus": "TK NEGERI PEMBINA PANGKALAN KASAI", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "TK NEGERI PEMBINA PERKEBUNAN SUNGAI LALA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 012 SEI. BERINGIN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 004 KAMPUNG DAGANG", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 019 KAMPUNG DAGANG", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 001 KAMPUNG BESAR KOTA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 009 KAMPUNG PULAU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 007 SEKIP HULU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 012 KAMPUNG DOGE", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 008 SIALANG DUA DAHAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 005 PEKAN HERAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 007 KOTA LAMA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 002 KOTA LAMA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 026 PEMATANG REBA", "f01": 23.3, "f02": 0.0, "f03": 6.7, "avg": 10.0, "status": "Sedang Diisi"}, {"lokus": "SD NEGERI 017 TITIAN RESAK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 020 SIMPANG IV BELILAS", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SD NEGERI 011 TITIAN RESAK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 1 RENGAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 1 RENGAT BARAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 1 SEBERIDA", "f01": 5.6, "f02": 0.0, "f03": 100.0, "avg": 35.2, "status": "Sedang Diisi"}, {"lokus": "SMP NEGERI 2 RENGAT", "f01": 0.0, "f02": 0.0, "f03": 86.7, "avg": 28.9, "status": "Sedang Diisi"}, {"lokus": "SMP NEGERI 2 RENGAT BARAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 2 SEBERIDA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 3 RENGAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 3 SEBERIDA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "SMP NEGERI 4 RENGAT", "f01": 95.6, "f02": 0.0, "f03": 100.0, "avg": 65.2, "status": "Sedang Diisi"}, {"lokus": "SMP NEGERI 5 RENGAT BARAT", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "Instanlasi Farmasi Kesehatan", "f01": 66.7, "f02": 0.0, "f03": 0.0, "avg": 22.2, "status": "Sedang Diisi"}, {"lokus": "UPTD Rumas Sakit Umum Daerah Indrasari Rengat", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PEKERJAAN UMUM, PENATAAN RUANG, PERUMAHAN DAN KAWASAN PERMUKIMAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Air Limbah Domestik", "f01": 0.0, "f02": 0.0, "f03": 40.0, "avg": 13.3, "status": "Sedang Diisi"}, {"lokus": "DINAS PENGENDALIAN PENDUDUK, KELUARGA BERENCANA, PEMBERDAYAAN PEREMPUAN DAN PERLINDUNGAN ANAK", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Perlindungan Perempuan dan Anak Dinas Pemberdayaan Perempuan dan Perlindungan Anak", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS LINGKUNGAN HIDUP, KEBERSIHAN DAN PERTAMANAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS KEPENDUDUKAN DAN PENCATATAN SIPIL", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "DINAS PERINDUSTRIAN, PERDAGANGAN, KOPERASI, USAHA KECIL DAN MENENGAH", "f01": 97.8, "f02": 100.0, "f03": 100.0, "avg": 99.3, "status": "Sedang Diisi"}, {"lokus": "UPTD Pengelolaan Pasar", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Metrologi Legal", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PENANAMAN MODAL DAN PELAYANAN TERPADU SATU PINTU", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PERKEBUNAN, PETERNAKAN DAN PERIKANAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Sentra Pembibitan Ternak Hijauan Pakan Ternak", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pasar Ternak dan Rumah Potong Hewan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Balai Benih Ikan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pembibitan Tanaman Perkebunan", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pembenihan Tanaman Pangan dan Holtikultura", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS KETAHANAN PANGAN, TANAMAN PANGAN DAN HORTIKULTURA", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "DINAS SOSIAL", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "DINAS TENAGA KERJA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Balai Latihan Kerja Wilayah I Pasir Penyu Dinas Tenaga Kerja", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PEMBERDAYAAN MASYARAKAT DAN DESA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PERHUBUNGAN", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengujian Kendaraan Bermotor", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS KOMUNIKASI, INFORMATIKA DAN STATISTIK", "f01": 100.0, "f02": 0.0, "f03": 100.0, "avg": 66.7, "status": "Sedang Diisi"}, {"lokus": "DINAS KEPEMUDAAN, OLAHRAGA DAN PARIWISATA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "DINAS PERPUSTAKAAN DAN KEARSIPAN", "f01": 100.0, "f02": 100.0, "f03": 100.0, "avg": 100.0, "status": "Selesai"}, {"lokus": "SATUAN POLISI PAMONG PRAJA", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN PERENCANAAN PEMBANGUNAN, RISET DAN INOVASI", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "BADAN PENDAPATAN DAERAH", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}, {"lokus": "UPTD Pengelolaan Pendapatan Daerah Kecamatan Rengat dan Kuala Cenaku", "f01": 0.0, "f02": 0.0, "f03": 0.0, "avg": 0, "status": "Belum Diisi"}];
+const U=["Persyaratan","Prosedur","Waktu","Biaya","Produk","Kompetensi","Perilaku","Pengaduan","Sarpras"];
+const UFULL=["Persyaratan","Sistem, mekanisme, dan prosedur","Waktu penyelesaian","Biaya / tarif","Produk spesifikasi jenis pelayanan","Kompetensi pelaksana","Perilaku pelaksana","Penanganan pengaduan","Sarana dan prasarana"];
+const KAB={unsur:[84.25,83.79,81.05,95.35,84.58,84.10,84.81,85.70,86.50],ikm:86.07,n:6749,tl:56};
 
-new Chart(document.getElementById('statusChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Belum diisi', 'Sedang diisi', 'Selesai'],
-    datasets: [{ data: [115, 18, 7], backgroundColor: ['#e34948', '#eda100', '#1a9e4f'], borderWidth: 2, borderColor: '#ffffff' }]
-  },
-  options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
-});
+const DATA=[
+{no:1,nama:"Dinas Perindustrian dan Perdagangan",sn:"Disperindag",u:[82.48,83.94,79.84,99.85,82.33,83.28,88.27,80.87,89.30],ikm:85.57,n:341,metode:"Manual",perbaikan:["Waktu","Pengaduan"],tl:100,rtl:"Menyelenggarakan Forum Konsultasi Publik.",svc:[["Fasilitasi pemenuhan komitmen perolehan IUI, IPUI, dan IUKI",91.60,90],["Penerbitan SHP dan KTPP",81.57,178],["Tera atau tera ulang UTTP di kantor",89.19,28],["Tera atau tera ulang UTTP di tempat UTTP terpakai",87.10,45]]},
+{no:2,nama:"Badan Kepegawaian, Pendidikan, dan Pelatihan",sn:"BKPPD",u:[85.88,86.18,85.00,100.00,86.76,85.88,87.06,84.41,97.94],ikm:88.79,n:85,metode:"Manual dan online",perbaikan:["Waktu","Pengaduan"],tl:0,rtl:"Nota dinas terkait penambahan jam layanan, monitoring efektivitas layanan, dan pelatihan penanganan pengaduan.",svc:[["Pembuatan KGB PNS",90.47,5],["Cuti ASN",88.80,9],["Kenaikan pangkat PNS",92.43,13],["Pensiun PNS",84.29,16],["Kenaikan jenjang JF",87.21,7],["Karis / Karsu PNS",88.80,3],["Satya Lencana Karya Satya",91.97,7],["Diklat struktural, teknis, dan fungsional",93.80,5],["Masa persiapan pensiun",97.13,1],["Perbaikan NIP dan nama ASN",83.25,3],["Ujian dinas dan penyesuaian ijazah",94.35,1],["Pencantuman gelar ASN",92.69,5],["Peremajaan data ASN",86.95,6],["Mutasi masuk",79.09,2],["Mutasi keluar",81.86,2]]},
+{no:3,nama:"UPTD Pengelolaan Air Limbah Domestik",sn:"UPTD PALD",u:[88.14,74.44,86.29,96.11,91.66,79.81,87.40,90.92,78.51],ikm:85.92,n:135,metode:"Manual dan online",perbaikan:["Prosedur","Kompetensi","Sarpras"],tl:0,rtl:"Penyederhanaan alur layanan, peningkatan kapasitas SDM melalui pelatihan, dan peningkatan fasilitas penunjang.",svc:[["Retribusi penyedotan kakus / lumpur tinja",85.92,135]]},
+{no:4,nama:"Kecamatan Rengat",sn:"Kec. Rengat",u:[81.44,79.19,79.20,100.00,80.69,80.69,81.02,77.99,100.00],ikm:84.49,n:265,metode:"Manual",perbaikan:["Prosedur","Waktu","Sarpras"],tl:0,rtl:"Evaluasi standar pelayanan.",svc:[["KTP",84.14,null],["KK",84.70,null],["Surat pindah",84.64,null]]},
+{no:5,nama:"Dinas Pemberdayaan Perempuan dan Perlindungan Anak",sn:"DP3A",u:[84.52,82.54,88.49,100.00,87.70,82.94,83.73,86.90,77.38],ikm:86.02,n:63,metode:"Manual",perbaikan:["Sarpras"],tl:0,rtl:"Menganggarkan sarana prasarana pendukung.",svc:[["Perlindungan perempuan dan anak",84.32,45],["Puspaga",90.28,18]]},
+{no:6,nama:"Dinas Pengendalian Penduduk dan Keluarga Berencana",sn:"DPPKB",u:[87.88,86.97,84.32,98.18,85.91,85.15,88.86,93.03,84.17],ikm:88.27,n:330,metode:"Manual",perbaikan:["Waktu","Sarpras"],tl:75,rtl:"Peningkatan sosialisasi registrasi layanan, penambahan jadwal layanan, meninjau ulang alur yang tidak efisien dan memastikan penetapan waktu yang realistis untuk setiap jenis layanan, mengevaluasi kebutuhan sarana prasarana, serta menyediakan sarana informasi seperti brosur, leaflet, atau …",svc:[["Pelayanan KB",87.75,218],["Pendistribusian alokon",89.29,112]]},
+{no:7,nama:"Kecamatan Sungai Lala",sn:"Kec. Sungai Lala",u:[72.35,75.60,72.84,83.76,73.96,73.03,75.70,75.48,77.36],ikm:85.01,n:190,metode:"Manual",perbaikan:["Persyaratan","Waktu"],tl:0,rtl:"Menyelenggarakan Forum Konsultasi Publik dan inovasi teknologi digitalisasi.",svc:[["Pengantar KK / KTP",81.24,29],["Pengantar pindah datang",81.40,6],["Pengantar pindah keluar",86.54,27],["Rekomendasi dispensasi nikah",84.39,22],["Rekomendasi izin hiburan",86.29,31],["Surat keterangan tidak mampu",85.62,62],["Surat keterangan ahli waris",88.57,12],["Surat izin operasional",86.03,1]]},
+{no:8,nama:"Dinas Pendidikan dan Kebudayaan",sn:"Disdikbud",u:[80.80,78.34,74.27,95.38,78.98,80.25,80.62,79.61,79.30],ikm:80.83,n:547,metode:"Online",perbaikan:["Waktu","Prosedur","Produk"],tl:0,rtl:"Pelatihan khusus terkait service excellent, monitoring dan evaluasi prosedur layanan, penyempurnaan standar pelayanan, serta inovasi produk layanan publik.",svc:[]},
+{no:9,nama:"Dinas Tenaga Kerja",sn:"Disnaker",u:[90.70,85.95,85.40,93.20,93.15,88.20,84.05,84.60,90.40],ikm:88.40,n:110,metode:"Manual",perbaikan:["Persyaratan","Pengaduan","Perilaku"],tl:100,rtl:"Sosialisasi persyaratan dan pelatihan service excellent.",svc:[["AK1",90.90,80],["Pengaduan perselisihan hubungan industrial",85.90,30]]},
+{no:10,nama:"Dinas Kependudukan dan Pencatatan Sipil",sn:"Disdukcapil",u:[85.00,84.75,92.25,90.00,82.75,82.75,82.50,83.00,80.25],ikm:84.93,n:242,metode:"Online",perbaikan:["Sarpras","Perilaku"],tl:100,rtl:"Pembuatan kanopi parkir dan rolling staf pelayanan.",svc:[["Penerbitan KTP",85.69,152],["Penerbitan KK",83.49,90]]},
+{no:11,nama:"Dinas Koperasi, Usaha Kecil dan Menengah",sn:"Diskop UKM",u:[82.25,82.14,81.25,97.77,79.02,81.70,81.70,93.30,71.43],ikm:83.28,n:56,metode:"Online",perbaikan:["Sarpras","Produk"],tl:0,rtl:"Pengadaan sarana prasarana dan evaluasi standar pelayanan.",svc:[["Konsultasi",82.99,32],["Verifikasi izin simpan pinjam KSP/KSPPS dan USP/USPPS",80.48,3],["Verifikasi izin pembukaan kantor cabang",80.44,1],["Verifikasi izin pembukaan kantor cabang pembantu",74.93,1],["Verifikasi izin pembukaan kantor kas",77.70,1],["Surat keterangan pergantian pengurus koperasi",81.86,2],["Surat keterangan pelaku UMKM dalam pendaftaran merek",85.33,16]]},
+{no:12,nama:"Kecamatan Lirik",sn:"Kec. Lirik",u:[76.00,76.67,50.00,82.60,85.75,86.00,75.37,83.00,85.69],ikm:77.99,n:242,metode:"Manual",perbaikan:["Waktu","Perilaku"],tl:100,rtl:"Menyelenggarakan Forum Konsultasi Publik dan memberikan pelatihan service excellent.",svc:[["KTP",79.33,85],["KK",76.56,80],["Surat pindah dan datang",78.67,77]]},
+{no:13,nama:"RSUD Indrasari Rengat",sn:"RSUD Indrasari",u:[81.50,81.50,80.50,94.25,78.50,83.00,83.00,76.75,83.50],ikm:84.30,n:357,metode:"Online",perbaikan:["Waktu","Produk","Perilaku","Pengaduan"],tl:100,rtl:"Monitoring dan evaluasi terhadap alur serta waktu pelayanan, menambah jenis pelayanan kesehatan, pelatihan service excellent, dan merespons pengaduan dengan segera.",svc:[]},
+{no:14,nama:"Dinas Perpustakaan",sn:"Dinas Perpustakaan",u:[81.25,80.75,79.25,100.00,80.25,80.25,83.25,81.00,88.50],ikm:83.84,n:564,metode:"Manual dan online",perbaikan:["Prosedur","Waktu"],tl:100,rtl:"Perbaikan dan evaluasi mekanisme serta prosedur layanan, disertai evaluasi lanjutan …",svc:[["Referensi",85.08,110],["Baca di tempat",84.39,245],["Sirkulasi",81.16,32],["Perpustakaan keliling",81.67,97],["TPBIS",84.86,80]]},
+{no:15,nama:"Kecamatan Peranap",sn:"Kec. Peranap",u:[96.00,95.75,95.75,100.00,96.25,94.25,94.25,94.25,94.25],ikm:95.57,n:150,metode:"Manual",perbaikan:["Waktu","Prosedur","Perilaku"],tl:null,rtl:"Peningkatan sosialisasi registrasi online, pembuatan alur pelayanan dan SOP, monitoring dan evaluasi prosedur pelayanan, simplifikasi proses bisnis, serta pelatihan service excellent.",svc:[]},
+{no:16,nama:"Dinas Komunikasi dan Informatika",sn:"Diskominfo",u:[81.09,81.94,76.83,83.25,80.22,81.79,83.98,90.43,93.65],ikm:83.69,n:101,metode:"Online",perbaikan:["Waktu","Pengaduan"],tl:100,rtl:"Menyelenggarakan Forum Konsultasi Publik untuk mereviu SOP tentang pengurangan waktu tunggu dan penanganan pengaduan.",svc:[["Permintaan informasi S-LAPOR",82.51,37],["Penerimaan informasi",84.68,33],["Pemanfaatan dan permintaan statistik sektoral",83.87,31]]},
+{no:17,nama:"Dinas Penanaman Modal dan PTSP",sn:"DPMPTSP",u:[87.00,90.50,88.25,100.00,86.25,85.00,87.25,90.75,88.00],ikm:88.34,n:351,metode:"Manual",perbaikan:["Kompetensi","Produk","Persyaratan"],tl:100,rtl:"Evaluasi kinerja individu, peninjauan ulang standar pelayanan, dan penyediaan informasi yang lengkap serta mudah dipahami.",svc:[["Perizinan",88.36,319],["Non perizinan",88.09,32]]},
+{no:18,nama:"Bagian Pengadaan Barang dan Jasa Setda",sn:"Bagian PBJ",u:[90.38,90.19,90.81,100.00,85.03,89.38,92.63,97.31,84.19],ikm:91.15,n:1833,metode:"Manual",perbaikan:["Sarpras","Produk"],tl:100,rtl:"Menyusun usulan anggaran untuk perbaikan atau pengadaan sarana prasarana, penataan ulang sarpras yang dinilai kurang, dan membekali seluruh petugas agar mampu menjelaskan spesifikasi …",svc:[["Tender",89.64,16],["Konsultasi pengadaan barang dan jasa",90.31,15],["Pendaftaran atau registrasi LPSE",88.36,6],["Lainnya",97.22,2]]},
+{no:19,nama:"Kecamatan Batang Cenaku",sn:"Kec. Batang Cenaku",u:[76.30,81.00,51.00,82.87,87.37,86.17,76.37,83.10,87.57],ikm:79.08,n:358,metode:"Manual",perbaikan:["Persyaratan","Perilaku"],tl:0,rtl:"Menyelenggarakan Forum Konsultasi Publik.",svc:[["Penerbitan KTP",79.40,170],["Penerbitan KK",79.32,64],["Surat pindah / datang",79.33,49],["SKKM",80.85,35],["Surat ahli waris",81.01,21],["Dispensasi nikah",80.76,19]]},
+{no:20,nama:"Kecamatan Lubuk Batu Jaya",sn:"Kec. Lubuk Batu Jaya",u:[87.26,87.11,88.36,100.00,87.11,86.16,88.52,76.73,88.36],ikm:87.74,n:159,metode:"Manual dan digital",perbaikan:["Pengaduan","Kompetensi"],tl:50,rtl:"Menunjuk petugas khusus yang bertanggung jawab penuh mengelola pengaduan, membuat kanal pengaduan, dan memberikan pelatihan.",svc:[["Pengantar KTP",87.20,28],["Pengantar KK",87.54,35],["Surat ahli waris",87.82,26],["Surat keterangan tidak mampu",87.19,49],["Surat dispensasi nikah",90.28,4],["Surat izin operasional",95.14,4],["Surat pindah keluar",88.25,13]]},
+{no:21,nama:"Dinas Sosial",sn:"Dinas Sosial",u:[95.81,96.41,94.99,99.93,97.01,96.03,95.28,99.93,94.69],ikm:96.67,n:334,metode:"Manual",perbaikan:["Sarpras"],tl:100,rtl:"Inventarisasi, pemeliharaan, dan pengawasan sarana prasarana agar tetap berfungsi optimal …",svc:[["PBI JK",96.86,273],["KIP",95.86,61]]},
+{no:22,nama:"Bagian Organisasi Setda",sn:"Bagian Organisasi",u:[85.87,83.70,82.61,98.37,82.61,82.61,84.24,80.98,92.39],ikm:85.93,n:46,metode:"Manual",perbaikan:["Sarpras","Perilaku"],tl:95,rtl:"Mengajukan surat permintaan pemenuhan sarana prasarana ke Bagian Umum Sekretariat Daerah, serta meningkatkan keterampilan komunikasi petugas pelayanan.",svc:[["Konsultasi",87.81,31],["Fasilitasi penyusunan standar pelayanan",80.56,2],["Fasilitasi SOP perangkat daerah",81.94,2],["Penetapan perda nomenklatur perangkat daerah",84.72,2],["Penetapan perbup susunan organisasi dan tata kerja",77.78,1],["Penyusunan anjab, ABK, peta jabatan, evaluasi jabatan",82.14,7],["Fasilitasi kesekretariatan Tim Reformasi Birokrasi",83.00,1]]}
+];
 
-new Chart(document.getElementById('formChart'), {
-  type: 'bar',
-  data: {
-    labels: ['F01', 'F02', 'F03'],
-    datasets: [{ label: 'Rata-rata (%)', data: [12.8, 6.8, 12.5], backgroundColor: '#2a78d6', borderRadius: 4, maxBarThickness: 40 }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+const fmt=v=>(v===null||v===undefined)?"—":v.toFixed(2).replace(".",",");
+const fmt0=v=>v.toLocaleString("id-ID");
+const mutu=v=>v>=88.31?"A":v>=76.61?"B":v>=65?"C":"D";
+const mutuNama={A:"Sangat Baik",B:"Baik",C:"Kurang Baik",D:"Tidak Baik"};
+const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---- gauge ---- */
+(function(){
+  const cx=150,cy=150,r=112,lo=25,hi=100;
+  const ang=v=>180+(v-lo)/(hi-lo)*180;
+  const pt=(rr,deg)=>{const a=deg*Math.PI/180;return [cx+rr*Math.cos(a), cy+rr*Math.sin(a)];};
+  const arc=(rr,v1,v2)=>{const[a,b]=pt(rr,ang(v1)),[c,d]=pt(rr,ang(v2));return `M${a.toFixed(2)} ${b.toFixed(2)} A${rr} ${rr} 0 0 1 ${c.toFixed(2)} ${d.toFixed(2)}`;};
+  const zones=[[25,64.99,"#AE3737"],[65,76.60,"#D9932B"],[76.61,88.30,"#4A8FD8"],[88.31,100,"#3FBF85"]];
+  let s="";
+  zones.forEach(([a,b,c])=>{s+=`<path d="${arc(r,a,b)}" stroke="${c}" stroke-width="19" fill="none" stroke-linecap="butt" opacity=".85"/>`;});
+  [25,50,76.61,88.31,100].forEach(v=>{
+    const[x1,y1]=pt(r-14,ang(v)),[x2,y2]=pt(r+14,ang(v));
+    s+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>`;
+  });
+  ["D","C","B","A"].forEach((k,i)=>{
+    const mid=(zones[i][0]+zones[i][1])/2;const[x,y]=pt(r-33,ang(mid));
+    s+=`<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="middle" font-size="13" font-weight="700" fill="rgba(255,255,255,.55)" font-family="Bricolage Grotesque,sans-serif">${k}</text>`;
+  });
+  const g=document.getElementById("gauge");
+  g.innerHTML=s+'<g id="needle"></g>';
+  const nd=g.querySelector("#needle");
+  function draw(v){
+    const[x,y]=pt(r-6,ang(v));
+    nd.innerHTML=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(2)}" y2="${y.toFixed(2)}" stroke="#F2C766" stroke-width="3.5" stroke-linecap="round"/>`+
+      `<circle cx="${cx}" cy="${cy}" r="9" fill="#F2C766"/><circle cx="${cx}" cy="${cy}" r="4" fill="#08222A"/>`;
   }
-});
+  const out=document.getElementById("gVal");
+  if(reduce){draw(KAB.ikm);out.textContent=fmt(KAB.ikm);return;}
+  const t0=performance.now(),dur=1250;
+  (function step(t){
+    const p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);
+    const v=lo+(KAB.ikm-lo)*e;
+    draw(v); out.textContent=fmt(v);
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+})();
 
-function statusClass(s) {
-  if (s === 'Selesai') return 'status-Selesai';
-  if (s === 'Sedang Diisi') return 'status-Sedang';
-  return 'status-Belum';
+/* ---- podium ---- */
+(function(){
+  const sorted=[...DATA].sort((a,b)=>b.ikm-a.ikm);
+  const top=sorted.slice(0,3), low=sorted.slice(-3).reverse();
+  const card=(o,i,isLow)=>{
+    const lab=isLow?["Terendah","Kedua terendah","Ketiga terendah"][i]:["Peringkat 1","Peringkat 2","Peringkat 3"][i];
+    const el=document.createElement("div");
+    el.className="pod"+(i===0?" rk1":"")+(isLow?" low":"");
+    el.innerHTML=`<div class="pod-rank">${lab}</div><div class="pod-name">${o.nama}</div>`+
+      `<div class="pod-val">${fmt(o.ikm)}</div><div class="pod-meta">Mutu ${mutu(o.ikm)} · ${fmt0(o.n)} responden · fokus perbaikan ${o.perbaikan.join(", ").toLowerCase()}</div>`;
+    el.style.cursor="pointer"; el.addEventListener("click",()=>openDrawer(o));
+    return el;
+  };
+  const a=document.getElementById("podTop"), b=document.getElementById("podLow");
+  top.forEach((o,i)=>a.appendChild(card(o,i,false)));
+  low.forEach((o,i)=>b.appendChild(card(o,i,true)));
+})();
+
+/* ---- nine elements ---- */
+(function(){
+  const el=document.getElementById("unsurBars");
+  KAB.unsur.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).forEach(({v,i})=>{
+    el.insertAdjacentHTML("beforeend",
+      `<div class="bar-row${v<KAB.ikm?" low":""}" title="${UFULL[i]}"><span class="bar-lab">${U[i]}</span>`+
+      `<span class="bar-track"><span class="bar-fill" style="width:${((v-70)/30*100).toFixed(1)}%"></span>`+
+      `<span class="avgline" style="left:${((KAB.ikm-70)/30*100).toFixed(1)}%"></span></span>`+
+      `<span class="bar-val">${fmt(v)}</span></div>`);
+  });
+  const ins=document.getElementById("insights");
+  [["Waktu penyelesaian, unsur terlemah","81,05",(81.05-70)/30*100,"Terpaut 5 poin di bawah IKM kabupaten dan jadi fokus perbaikan di 11 dari 22 unit."],
+   ["Biaya / tarif, unsur terkuat","95,35",(95.35-70)/30*100,"Tidak satu pun unit menjadikannya fokus perbaikan. Kejelasan tarif sudah dipersepsi baik."],
+   ["Jarak unit tertinggi dan terendah","18,68",62,"Dinas Sosial 96,67 berbanding Kecamatan Lirik 77,99."]
+  ].forEach(([t,v,w,note])=>{
+    ins.insertAdjacentHTML("beforeend",
+      `<div><div class="mini-top"><span>${t}</span><b>${v}</b></div>`+
+      `<div class="mini-track"><div class="mini-fill" style="width:${Math.min(100,w).toFixed(1)}%"></div></div>`+
+      `<p class="note">${note}</p></div>`);
+  });
+})();
+
+/* ---- heatmap ---- */
+(function(){
+  const stops=[[50,[174,55,55]],[75,[217,160,48]],[100,[18,134,106]]];
+  function heat(v){
+    v=Math.max(50,Math.min(100,v));
+    let i=v<=75?0:1;
+    const [v1,c1]=stops[i],[v2,c2]=stops[i+1];
+    const t=(v-v1)/(v2-v1);
+    return `rgb(${c1.map((c,k)=>Math.round(c+(c2[k]-c)*t)).join(",")})`;
+  }
+  const g=document.getElementById("heat");
+  let h='<div></div>'+U.map(u=>`<div class="hm-h">${u}</div>`).join("");
+  [...DATA].sort((a,b)=>b.ikm-a.ikm).forEach(o=>{
+    h+=`<div class="hm-n" data-no="${o.no}" title="${o.nama} — IKM ${fmt(o.ikm)}">${o.sn}</div>`;
+    o.u.forEach((v,i)=>{h+=`<div class="hm-c" data-no="${o.no}" style="background:${heat(v)}" title="${o.nama} · ${UFULL[i]}: ${fmt(v)}">${Math.round(v)}</div>`;});
+  });
+  g.innerHTML=h;
+  g.addEventListener("click",e=>{
+    const t=e.target.closest("[data-no]"); if(!t) return;
+    openDrawer(DATA.find(d=>d.no===+t.dataset.no));
+  });
+})();
+
+/* ---- ranking ---- */
+const rankList=document.getElementById("rankList");
+function renderRank(){
+  const q=document.getElementById("rankSearch").value.toLowerCase().trim();
+  const f=document.getElementById("rankFilter").value;
+  const s=document.getElementById("rankSort").value;
+  const sorters={ikm:(a,b)=>b.ikm-a.ikm,ikmasc:(a,b)=>a.ikm-b.ikm,n:(a,b)=>b.n-a.n,nama:(a,b)=>a.nama.localeCompare(b.nama,"id")};
+  const rows=DATA.filter(o=>o.nama.toLowerCase().includes(q)).filter(o=>f==="all"||mutu(o.ikm)===f).sort(sorters[s]);
+  rankList.innerHTML=rows.length?"":'<p class="note">Tidak ada unit yang cocok. Ubah kata kunci atau saringan mutu.</p>';
+  rows.forEach((o,i)=>{
+    const k=mutu(o.ikm);
+    const btn=document.createElement("button"); btn.type="button"; btn.className="rank-row";
+    btn.innerHTML=`<span class="rank-no">${i+1}</span><span class="rank-name" title="${o.nama}">${o.nama}</span>`+
+      `<span class="rank-track"><span class="rank-fill f-${k.toLowerCase()}" style="width:${Math.max(3,(o.ikm-70)/30*100).toFixed(1)}%"></span></span>`+
+      `<span class="rank-val">${fmt(o.ikm)}</span><span class="rank-chip chip-${k.toLowerCase()}">${k}</span>`;
+    btn.addEventListener("click",()=>openDrawer(o));
+    rankList.appendChild(btn);
+  });
 }
+["rankSearch","rankFilter","rankSort"].forEach(id=>document.getElementById(id).addEventListener("input",renderRank));
+renderRank();
 
-function renderTable() {
-  const q = document.getElementById('searchBox').value.toLowerCase();
-  const f = document.getElementById('statusFilter').value;
-  const rows = DATA.filter(d => d.lokus.toLowerCase().includes(q) && (f === 'all' || d.status === f));
-  const body = document.getElementById('tableBody');
-  body.innerHTML = rows.map(d => `
-    <tr>
-      <td title="${d.lokus}">${d.lokus}</td>
-      <td class="num">${d.f01}%</td>
-      <td class="num">${d.f02}%</td>
-      <td class="num">${d.f03}%</td>
-      <td><span class="status-pill ${statusClass(d.status)}">${d.status}</span></td>
-    </tr>
-  `).join('');
-  document.getElementById('rowCount').textContent = `Menampilkan ${rows.length} dari ${DATA.length} lokus`;
+/* ---- donut ---- */
+(function(){
+  const counts={A:0,B:0,C:0,D:0}; DATA.forEach(o=>counts[mutu(o.ikm)]++);
+  const total=DATA.length,R=44,C=2*Math.PI*R,cols={A:"var(--a)",B:"var(--b)",C:"var(--c)",D:"var(--d)"};
+  let off=0,s=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="var(--line-soft)" stroke-width="17"/>`;
+  Object.keys(counts).forEach(k=>{
+    if(!counts[k])return;
+    const len=counts[k]/total*C;
+    s+=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="${cols[k]}" stroke-width="17" stroke-linecap="butt" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 60 60)"><title>Mutu ${k}: ${counts[k]} unit</title></circle>`;
+    off+=len;
+  });
+  s+=`<text x="60" y="58" text-anchor="middle" font-size="22" font-weight="800" fill="var(--ink)" font-family="Bricolage Grotesque,sans-serif">${total}</text>`+
+     `<text x="60" y="73" text-anchor="middle" font-size="9" fill="var(--ink-3)" font-family="IBM Plex Sans,sans-serif">unit</text>`;
+  document.getElementById("donut").innerHTML=s;
+  const lg=document.getElementById("donutLegend");
+  Object.keys(counts).forEach(k=>lg.insertAdjacentHTML("beforeend",
+    `<div><span class="dot" style="background:${counts[k]?cols[k]:"var(--line)"}"></span><span>Mutu ${k} — ${mutuNama[k]}</span><b style="margin-left:auto;font-weight:600">${counts[k]}</b></div>`));
+})();
+
+/* ---- metode + TL ---- */
+(function(){
+  const m={}; DATA.forEach(o=>m[o.metode]=(m[o.metode]||0)+1);
+  const el=document.getElementById("metodeChart");
+  Object.entries(m).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>el.insertAdjacentHTML("beforeend",
+    `<div><div class="mini-top"><span>${k}</span><b>${v} unit</b></div><div class="mini-track"><div class="mini-fill" style="width:${(v/DATA.length*100).toFixed(1)}%"></div></div></div>`));
+  const el2=document.getElementById("tlChart");
+  [["Sudah 100%",o=>o.tl===100,"var(--a)"],["Sebagian (50–95%)",o=>o.tl!==null&&o.tl>0&&o.tl<100,"var(--c)"],
+   ["Belum ada (0%)",o=>o.tl===0,"var(--d)"],["Tidak tercatat",o=>o.tl===null,"var(--ink-3)"]].forEach(([lab,fn,col])=>{
+    const v=DATA.filter(fn).length;
+    el2.insertAdjacentHTML("beforeend",
+      `<div><div class="mini-top"><span>${lab}</span><b>${v} unit</b></div><div class="mini-track"><div class="mini-fill" style="width:${(v/DATA.length*100).toFixed(1)}%;background:${col}"></div></div></div>`);
+  });
+})();
+
+/* ---- prioritas ---- */
+(function(){
+  const c={}; U.forEach(u=>c[u]=0);
+  DATA.forEach(o=>o.perbaikan.forEach(p=>{if(c[p]!==undefined)c[p]++}));
+  const max=Math.max(...Object.values(c));
+  const el=document.getElementById("prioChart");
+  Object.entries(c).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>el.insertAdjacentHTML("beforeend",
+    `<div class="prio-row"><span>${k}</span><span class="prio-track"><span class="prio-fill" style="width:${(max?v/max*100:0).toFixed(1)}%"></span></span><span class="prio-n">${v} unit · ${Math.round(v/DATA.length*100)}%</span></div>`));
+  const el2=document.getElementById("rtlThemes");
+  [["Forum Konsultasi Publik",/forum konsultasi publik/i],["Pelatihan service excellent",/service excellent|pelatihan/i],
+   ["Evaluasi standar pelayanan atau SOP",/standar pelayanan|sop|prosedur/i],["Pemenuhan sarana prasarana",/sarana|sarpras|kanopi|fasilitas/i],
+   ["Penguatan kanal pengaduan",/pengaduan/i],["Digitalisasi dan sosialisasi daring",/digital|online|sosialisasi/i]]
+   .map(([lab,re])=>[lab,DATA.filter(o=>re.test(o.rtl)).length]).sort((a,b)=>b[1]-a[1])
+   .forEach(([lab,v])=>el2.insertAdjacentHTML("beforeend",
+     `<div><div class="mini-top"><span>${lab}</span><b>${v} unit</b></div><div class="mini-track"><div class="mini-fill" style="width:${(v/DATA.length*100).toFixed(1)}%;background:linear-gradient(90deg,var(--gold),var(--gold-bright))"></div></div></div>`));
+})();
+
+/* ---- table ---- */
+let sortKey="ikm",sortAsc=false;
+function renderTable(){
+  const q=document.getElementById("tblSearch").value.toLowerCase().trim();
+  const rows=DATA.filter(o=>o.nama.toLowerCase().includes(q)).sort((a,b)=>{
+    let va,vb;
+    if(sortKey[0]==="u"&&sortKey.length===2){const i=+sortKey[1];va=a.u[i];vb=b.u[i];}
+    else if(sortKey==="mutu"){va=a.ikm;vb=b.ikm;}
+    else if(sortKey==="tl"){va=a.tl===null?-1:a.tl;vb=b.tl===null?-1:b.tl;}
+    else{va=a[sortKey];vb=b[sortKey];}
+    if(typeof va==="string")return sortAsc?va.localeCompare(vb,"id"):vb.localeCompare(va,"id");
+    return sortAsc?va-vb:vb-va;
+  });
+  const body=document.getElementById("tblBody"); body.innerHTML="";
+  rows.forEach(o=>{
+    const k=mutu(o.ikm), tr=document.createElement("tr"); tr.tabIndex=0;
+    tr.innerHTML=`<td>${o.nama}</td>${o.u.map(v=>`<td>${fmt(v)}</td>`).join("")}`+
+      `<td><strong>${fmt(o.ikm)}</strong></td><td><span class="chip chip-${k.toLowerCase()}">${k}</span></td>`+
+      `<td>${fmt0(o.n)}</td><td>${o.tl===null?"—":o.tl+"%"}</td>`;
+    tr.addEventListener("click",()=>openDrawer(o));
+    tr.addEventListener("keydown",e=>{if(e.key==="Enter")openDrawer(o)});
+    body.appendChild(tr);
+  });
+  document.getElementById("tblFoot").innerHTML=
+    `<tr><td>IKM instansi — seluruh kabupaten</td>${KAB.unsur.map(v=>`<td>${fmt(v)}</td>`).join("")}`+
+    `<td>${fmt(KAB.ikm)}</td><td><span class="chip chip-b">B</span></td><td>${fmt0(KAB.n)}</td><td>${KAB.tl}%</td></tr>`;
 }
-
-document.getElementById('searchBox').addEventListener('input', renderTable);
-document.getElementById('statusFilter').addEventListener('change', renderTable);
+document.querySelectorAll("#tbl th").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k;
+  if(sortKey===k)sortAsc=!sortAsc; else{sortKey=k;sortAsc=(k==="nama");}
+  document.querySelectorAll("#tbl th").forEach(x=>x.classList.remove("sorted","asc"));
+  th.classList.add("sorted"); if(sortAsc)th.classList.add("asc");
+  renderTable();
+}));
+document.getElementById("tblSearch").addEventListener("input",renderTable);
 renderTable();
+
+/* ---- drawer ---- */
+const drawer=document.getElementById("drawer"),scrim=document.getElementById("scrim");
+let lastFocus=null;
+function openDrawer(o){
+  lastFocus=document.activeElement;
+  const k=mutu(o.ikm);
+  document.getElementById("drawerHead").innerHTML=
+    `<div class="drawer-hd"><h3>${o.nama}</h3><div class="dscore"><span class="n">${fmt(o.ikm)}</span>`+
+    `<span class="chip chip-${k.toLowerCase()}">Mutu ${k} — ${mutuNama[k]}</span></div>`+
+    `<div class="dmeta">${fmt0(o.n)} responden · metode ${o.metode.toLowerCase()} · tindak lanjut periode lalu ${o.tl===null?"tidak tercatat":o.tl+"%"}</div></div>`;
+  let h='<div class="dsec"><h4>Nilai sembilan unsur</h4><div class="bars">';
+  o.u.forEach((v,i)=>{
+    h+=`<div class="bar-row${v<o.ikm?" low":""}" title="${UFULL[i]}"><span class="bar-lab">${U[i]}</span>`+
+       `<span class="bar-track"><span class="bar-fill" style="width:${Math.max(1,(v-50)/50*100).toFixed(1)}%"></span>`+
+       `<span class="avgline" style="left:${((o.ikm-50)/50*100).toFixed(1)}%"></span></span><span class="bar-val">${fmt(v)}</span></div>`;
+  });
+  h+=`</div><p class="note">Skala 50–100. Garis vertikal menandai IKM unit ini.</p></div>`;
+  h+=`<div class="dsec"><h4>Unsur yang jadi fokus perbaikan</h4><div>${o.perbaikan.map(p=>`<span class="tag">${p}</span>`).join("")}</div></div>`;
+  h+=`<div class="dsec"><h4>Rencana tindak lanjut</h4><p class="rtl">${o.rtl}</p></div>`;
+  if(o.svc.length){
+    h+='<div class="dsec"><h4>Rincian jenis layanan</h4><div class="svc">'+
+       '<div class="svc-row" style="color:var(--ink-3);font-size:11.5px"><span>Layanan</span><b>IKM</b><i>Resp.</i></div>';
+    o.svc.slice().sort((a,b)=>b[1]-a[1]).forEach(([nm,ik,n])=>{
+      h+=`<div class="svc-row"><span title="${nm}">${nm}</span><b>${fmt(ik)}</b><i>${n===null?"—":fmt0(n)}</i></div>`;});
+    h+='</div></div>';
+  }
+  document.getElementById("drawerBody").innerHTML=h;
+  drawer.classList.add("open"); scrim.classList.add("open");
+  drawer.scrollTop=0;
+  document.getElementById("drawerClose").focus();
+}
+function closeDrawer(){drawer.classList.remove("open");scrim.classList.remove("open");if(lastFocus)lastFocus.focus();}
+document.getElementById("drawerClose").addEventListener("click",closeDrawer);
+scrim.addEventListener("click",closeDrawer);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&drawer.classList.contains("open"))closeDrawer()});
+
+/* ---- theme ---- */
+const btn=document.getElementById("themeBtn");
+const isDark=()=>{const s=document.documentElement.getAttribute("data-theme");return s?s==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;};
+const sync=()=>btn.textContent=isDark()?"Mode terang":"Mode gelap";
+btn.addEventListener("click",()=>{
+  document.documentElement.setAttribute("data-theme",isDark()?"light":"dark"); sync();
+  try{localStorage.setItem("skm-theme",document.documentElement.getAttribute("data-theme"))}catch(e){}
+});
+try{const s=localStorage.getItem("skm-theme"); if(s)document.documentElement.setAttribute("data-theme",s);}catch(e){}
+sync();
 </script>
 </body>
 </html>
