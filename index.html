@@ -123,6 +123,16 @@ section{padding:62px 0 4px}
 .bar-val{text-align:right;font-weight:600}
 .avgline{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.4}
 
+/* radar */
+.radar-card{margin-top:22px}
+.radar-wrap{display:flex;justify-content:center;padding:8px 0 2px}
+.radar-wrap svg{width:100%;max-width:340px;height:auto}
+.radar-key{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;font-size:12px;color:var(--ink-3);margin-top:6px}
+.radar-key span{display:flex;align-items:center;gap:7px}
+.key-line{width:16px;height:0;border-top:2.5px solid var(--teal);display:inline-block}
+.key-line.dash{border-top:2.5px dashed var(--ink-3)}
+.key-line.gold{border-top:1.5px dashed var(--gold)}
+
 /* heatmap */
 .hm{overflow-x:auto;margin-top:6px}
 .hm-grid{min-width:720px;display:grid;grid-template-columns:200px repeat(9,1fr);gap:3px;align-items:center}
@@ -284,10 +294,11 @@ footer strong{color:#EAF4F1;font-weight:600}
     <p>Nilai gabungan seluruh unit. Biaya hampir sempurna karena sebagian besar layanan tidak dipungut biaya, sementara waktu penyelesaian jadi titik paling lemah.</p>
   </div>
   <div class="g2">
-    <div class="card">
-      <h3>Nilai per unsur, tingkat kabupaten</h3>
-      <p class="note">Garis vertikal menandai IKM kabupaten (86,07). Batang oranye berada di bawah angka itu.</p>
-      <div class="bars" id="unsurBars"></div>
+    <div class="card radar-card">
+      <h3>Bentuk profil sembilan unsur, akumulasi kabupaten</h3>
+      <p class="note">Garis emas putus-putus menandai ambang mutu A (88,31). Makin dekat bentuk ke tepi terluar, makin merata mutu unsur itu.</p>
+      <div class="radar-wrap" id="radarKabWrap"></div>
+      <div class="radar-key"><span><i class="key-line"></i>Rata-rata kabupaten</span><span><i class="key-line gold"></i>Ambang mutu A (88,31)</span></div>
     </div>
     <div class="card">
       <h3>Tiga hal yang perlu dibaca</h3>
@@ -495,14 +506,6 @@ const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---- nine elements ---- */
 (function(){
-  const el=document.getElementById("unsurBars");
-  KAB.unsur.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).forEach(({v,i})=>{
-    el.insertAdjacentHTML("beforeend",
-      `<div class="bar-row${v<KAB.ikm?" low":""}" title="${UFULL[i]}"><span class="bar-lab">${U[i]}</span>`+
-      `<span class="bar-track"><span class="bar-fill" style="width:${((v-70)/30*100).toFixed(1)}%"></span>`+
-      `<span class="avgline" style="left:${((KAB.ikm-70)/30*100).toFixed(1)}%"></span></span>`+
-      `<span class="bar-val">${fmt(v)}</span></div>`);
-  });
   const ins=document.getElementById("insights");
   [["Waktu penyelesaian, unsur terlemah","81,05",(81.05-70)/30*100,"Terpaut 5 poin di bawah IKM kabupaten dan jadi fokus perbaikan di 11 dari 22 unit."],
    ["Biaya / tarif, unsur terkuat","95,35",(95.35-70)/30*100,"Tidak satu pun unit menjadikannya fokus perbaikan. Kejelasan tarif sudah dipersepsi baik."],
@@ -611,6 +614,58 @@ renderRank();
      `<div><div class="mini-top"><span>${lab}</span><b>${v} unit</b></div><div class="mini-track"><div class="mini-fill" style="width:${(v/DATA.length*100).toFixed(1)}%;background:linear-gradient(90deg,var(--gold),var(--gold-bright))"></div></div></div>`));
 })();
 
+/* ---- radar ---- */
+function radarSVG(polys, opts){
+  opts = opts || {};
+  const lo = opts.lo!==undefined ? opts.lo : 50;
+  const hi = opts.hi!==undefined ? opts.hi : 100;
+  const threshold = opts.threshold!==undefined ? opts.threshold : null;
+  const size = opts.size || 300;
+  const cx = size/2, cy = size/2+4, R = size*0.335;
+  const rFor = v => Math.max(0, Math.min(1, (v-lo)/(hi-lo))) * R;
+  const pt = (i,v) => {
+    const a = -Math.PI/2 + i*2*Math.PI/9;
+    const r = rFor(v);
+    return [cx + r*Math.cos(a), cy + r*Math.sin(a)];
+  };
+  let g = "";
+  [.25,.5,.75,1].forEach(f=>{
+    const p = Array.from({length:9},(_,i)=>{
+      const a = -Math.PI/2 + i*2*Math.PI/9;
+      return (cx+R*f*Math.cos(a)).toFixed(1)+","+(cy+R*f*Math.sin(a)).toFixed(1);
+    }).join(" ");
+    g += `<polygon points="${p}" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+  });
+  for(let i=0;i<9;i++){
+    const a = -Math.PI/2 + i*2*Math.PI/9;
+    g += `<line x1="${cx}" y1="${cy}" x2="${(cx+R*Math.cos(a)).toFixed(1)}" y2="${(cy+R*Math.sin(a)).toFixed(1)}" stroke="var(--line)" stroke-width="1"/>`;
+    const lx = cx+(R+24)*Math.cos(a), ly = cy+(R+24)*Math.sin(a);
+    const anchor = Math.abs(Math.cos(a))<0.25 ? "middle" : (Math.cos(a)>0 ? "start" : "end");
+    g += `<text x="${lx.toFixed(1)}" y="${(ly+3.5).toFixed(1)}" text-anchor="${anchor}" font-size="10.5" fill="var(--ink-3)" font-family="IBM Plex Sans, sans-serif">${U[i]}</text>`;
+  }
+  if(threshold!==null){
+    const rr = rFor(threshold);
+    g += `<circle cx="${cx}" cy="${cy}" r="${rr.toFixed(1)}" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="3 4"/>`;
+  }
+  polys.forEach(p=>{
+    const pts = p.vals.map((v,i)=>pt(i,v).map(n=>n.toFixed(1)).join(",")).join(" ");
+    if(p.dash){
+      g += `<polygon points="${pts}" fill="none" stroke="${p.stroke}" stroke-width="2" stroke-dasharray="5 4"/>`;
+    } else {
+      g += `<polygon points="${pts}" fill="${p.fill||"none"}" fill-opacity="${p.fillOpacity!=null?p.fillOpacity:0}" stroke="${p.stroke}" stroke-width="2.5" stroke-linejoin="round"/>`;
+      p.vals.forEach((v,i)=>{
+        const [x,y] = pt(i,v);
+        g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4" fill="${p.stroke}"><title>${UFULL[i]}: ${fmt(v)}</title></circle>`;
+      });
+    }
+  });
+  return `<svg viewBox="0 0 ${size} ${size+16}" role="img" aria-label="Radar sembilan unsur">${g}</svg>`;
+}
+document.getElementById("radarKabWrap").innerHTML = radarSVG(
+  [{vals:KAB.unsur, stroke:"var(--teal)", fill:"var(--teal)", fillOpacity:.2}],
+  {lo:70, hi:100, threshold:88.31, size:300}
+);
+
 /* ---- table ---- */
 let sortKey="ikm",sortAsc=false;
 function renderTable(){
@@ -658,7 +713,15 @@ function openDrawer(o){
     `<div class="drawer-hd"><h3>${o.nama}</h3><div class="dscore"><span class="n">${fmt(o.ikm)}</span>`+
     `<span class="chip chip-${k.toLowerCase()}">Mutu ${k} — ${mutuNama[k]}</span></div>`+
     `<div class="dmeta">${fmt0(o.n)} responden · metode ${o.metode.toLowerCase()} · tindak lanjut periode lalu ${o.tl===null?"tidak tercatat":o.tl+"%"}</div></div>`;
-  let h='<div class="dsec"><h4>Nilai sembilan unsur</h4><div class="bars">';
+  let h='<div class="dsec"><h4>Profil sembilan unsur</h4>'+
+    '<div class="radar-wrap">'+radarSVG(
+      [{vals:KAB.unsur, stroke:"var(--ink-3)", dash:true},
+       {vals:o.u, stroke:"var(--teal)", fill:"var(--teal)", fillOpacity:.2}],
+      {lo:50, hi:100, size:280}
+    )+'</div>'+
+    '<div class="radar-key"><span><i class="key-line"></i>'+o.sn+'</span><span><i class="key-line dash"></i>Rata-rata kabupaten</span></div>'+
+    '</div>';
+  h+='<div class="dsec"><h4>Nilai sembilan unsur</h4><div class="bars">';
   o.u.forEach((v,i)=>{
     h+=`<div class="bar-row${v<o.ikm?" low":""}" title="${UFULL[i]}"><span class="bar-lab">${U[i]}</span>`+
        `<span class="bar-track"><span class="bar-fill" style="width:${Math.max(1,(v-50)/50*100).toFixed(1)}%"></span>`+
